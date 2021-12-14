@@ -113,17 +113,16 @@ SSH into the control node and follow the steps below:
 
 ![TODO: Update the path with the name of your diagram](Diagrams/HW13_ELK_DashboardScreenshot.png)
 
-_TODO: Answer the following questions to fill in the blanks:_
+
 - **Which file is the playbook? _install-elk.yml_.  Where do you copy it? _/etc/ansible_**
 - **Which file do you update to make Ansible run the playbook on a specific machine? _hosts_.**
 - **How do I specify which machine to install the ELK server on versus which to install Filebeat on? _One can specify the "elk" group to install on the ELK server and the "webservers" group to install Filebeat._**
 - **Which URL do you navigate to in order to check that the ELK server is running? You can navigate to the following URL:_http://ELK-1PublicIPaddress:5601/app/kibana_. _For example, http://13.89.34.47:5601/app/kibana_**.
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
 
-### What a typical play looks like
+### Specific commands the user will need to run to download the playbook, update the files, etc.
 
-- Here are the coommands that should be executed on an Ansible control node.  Please note that **git clone** will not download project that contains playbooks and config files if git is not installed on the Ansible control code.  Please also note that **Username (_azadmin_)/IP Address (_0.124.32.124_) and docker container (_exciting_napier_)** for the ansible control conde will be different for your run
+- _Here are the coommands that should be executed on an Ansible control node._  Please note that **git clone** will not download project that contains playbooks and config files if git is not installed on the Ansible control code.  Please also note that **Username (_azadmin_)/IP Address (_0.124.32.124_) and docker container (_exciting_napier_)** for the ansible control conde will be different for your run.
 
 ```
 $ ssh azadmin@20.124.32.124
@@ -166,5 +165,76 @@ Unpacking objects: 100% (39/39), 996.84 KiB | 10.60 MiB/s, done.
 
 root@aaaae0e4c2e0:~# sudo cp -r /etc/ansible/HW13-ELK-STACK-PROJECT/Ansible/* .
 root@aaaae0e4c2e0:~# ansible-playbook install-elk.yml
+```
+
+### Notable configuration files changes
+
+- Changes on remote_user in **ansible.cfg**
+
+```
+
+# default user to use for playbooks if user is not specified
+# (/usr/bin/ansible will use current user as default)
+#remote_user = root
+remote_user = azadmin
+
+```
+
+- Change on IP address and port in **filebeat-config.yml**
+
+
+```
+#================================ Outputs ======================================
+
+# Configure what output to use when sending the data collected by the beat.
+
+#-------------------------- Elasticsearch output -------------------------------
+output.elasticsearch:
+  # Boolean flag to enable or disable the output module.
+  #enabled: true
+
+  # Array of hosts to connect to.
+  # Scheme and port can be left out and will be set to the default (http and 9200)
+  # In case you specify and additional path, the scheme is required: http://localhost:9200/path
+  # IPv6 addresses should always be defined as: https://[2001:db8::1]:9200
+  hosts: ["10.1.0.4:9200"]
+  username: "elastic"
+  password: "changeme" # TODO: Change this to the password you set
+...
+#============================== Kibana =====================================
+
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+setup.kibana:
+  host: "10.1.0.4:5601" # TODO: Change this to the IP address of your ELK server
+
+
+```
+
+- Change on IP address and port in in **metricbeat-config.yml**
+
+
+```
+
+#============================== Kibana =====================================
+
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+setup.kibana:
+  host: "10.1.0.4:5601"
+
+  # Kibana Host
+
+...
+
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  # TODO: Change the hosts IP address to the IP address of your ELK server
+  # TODO: Change password from `changem` to the password you created
+  hosts: ["10.1.0.4:9200"]
+  username: "elastic"
+  password: "changeme"
+
+
 ```
 
