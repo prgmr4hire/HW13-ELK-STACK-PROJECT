@@ -6,9 +6,11 @@ The files in this repository were used to configure the network depicted below.
 
 ![TODO: Update the path with the name of your diagram](Diagrams/HW13_AzureNetworkDiagram.png)
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the **_install-elk.yml_ playbook** file may be used to install only certain pieces of it, such as Filebeat.
+These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the **following _three_ playbooks**  may be used to install only certain pieces of it, such as Filebeat.
 
   - _[install-elk.yml](Ansible/install-elk.yml)._
+  - _[install-filebeat.yml](Ansible/install-filebeat.yml)._
+  - _[install-metricbeat.yml](Ansible/install-metricbeat.yml)._
 
 This document contains the following details:
 - Description of the Topology
@@ -165,6 +167,12 @@ Unpacking objects: 100% (39/39), 996.84 KiB | 10.60 MiB/s, done.
 
 root@aaaae0e4c2e0:~# sudo cp -r /etc/ansible/HW13-ELK-STACK-PROJECT/Ansible/* .
 root@aaaae0e4c2e0:~# ansible-playbook install-elk.yml
+...
+root@aaaae0e4c2e0:~# ansible-playbook install-filebeat.yml
+,,,
+root@aaaae0e4c2e0:~# ansible-playbook install-metricbeat.yml
+...
+
 ```
 
 ### Notable configuration files changes
